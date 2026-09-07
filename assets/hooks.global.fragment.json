@@ -1,0 +1,54 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"<CODEX_HOME>\\hooks\\astra_turn_guard.py\"",
+            "timeout": 10,
+            "statusMessage": "Checking Astra team routing"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"<CODEX_HOME>\\hooks\\astra_turn_guard.py\"",
+            "timeout": 10,
+            "statusMessage": "Observing Astra collaboration"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "sol_high|sol_xhigh|terra_max|luna_max|luna_explorer_max",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"<CODEX_HOME>\\hooks\\astra_turn_guard.py\"",
+            "timeout": 10,
+            "statusMessage": "Recording Astra delegation"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"<CODEX_HOME>\\hooks\\astra_turn_guard.py\"",
+            "timeout": 10,
+            "statusMessage": "Verifying Astra delegation"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+# Merge into the user-level Codex config; preserve unrelated settings.
+# Example defaults only: preserve the user's selected model and effort.
+# Astra Low and above evaluates routing; small tasks can run directly.
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 2
+default_subagent_model = "gpt-5.6-luna"
+default_subagent_reasoning_effort = "max"
+
+[agents.astra_xhigh]
+description = "Core architecture and critical cross-module decisions."
+config_file = "./agents/astra_xhigh.toml"
+
+[agents.sol_high]
+description = "Complex implementation and daily technical acceptance within an approved architecture."
+config_file = "./agents/sol_high.toml"
+
+[agents.sol_xhigh]
+description = "Difficult module logic and deep debugging within an approved architecture."
+config_file = "./agents/sol_xhigh.toml"
+
+[agents.terra_max]
+description = "Bounded medium-complexity implementation and integration tests."
+config_file = "./agents/terra_max.toml"
+
+[agents.luna_max]
+description = "Small scoped changes, repetitive edits, tests, and documentation."
+config_file = "./agents/luna_max.toml"
+
+[agents.luna_explorer_max]
+description = "Read-only targeted repository exploration."
+config_file = "./agents/luna_explorer_max.toml"

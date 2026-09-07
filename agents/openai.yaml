@@ -1,0 +1,4 @@
+interface:
+  display_name: "Astra Sol Codex Team"
+  short_description: "Deploy fixed-role Codex model settings with checks and rollback"
+  default_prompt: "Use $codex-astra-team to deploy and verify the Astra/Sol/Terra/Luna strategy in this project, preserving existing settings and permissions."
