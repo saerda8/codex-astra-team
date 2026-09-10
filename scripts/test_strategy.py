@@ -140,68 +140,14 @@ class StrategyTests(unittest.TestCase):
             documents,
         )
 
-    def test_visible_model_effort_comes_from_current_turn(self):
+    def test_output_style_is_not_prescribed(self):
         bundle = Path(__file__).resolve().parents[1]
-        documents = '\n'.join((bundle / relative).read_text(encoding='utf-8') for relative in (
-            'SKILL.md',
-            'assets/PROJECT_RULES.md',
-            'references/GLOBAL_DEPLOYMENT.md',
-            'references/DEPLOYMENT.md',
-        ))
-        for phrase in (
-            '开工说明和最终结果只有在取得当前回合真实模型与档位时才显示',
-            '不得使用全局默认值、角色名或历史文字推测',
-            '未取得真实值时省略模型与档位，不向用户显示“无法获取”',
-            '从 Astra Low 起进入协作路由',
-            '开工时显示主会话真实值和计划子角色的档位',
-            '收尾时显示主会话真实值和实际使用子智能体的角色与档位',
-            '未实际启动的角色不得写成实际执行',
-        ):
-            self.assertIn(phrase, documents)
-        self.assertNotIn('| 主会话 | gpt-6-astra | high |', documents)
-        self.assertNotIn('主会话使用 Astra high', documents)
-
-    def test_astra_routing_requires_visible_receipt_and_real_delegate(self):
-        bundle = Path(__file__).resolve().parents[1]
-        rules = (bundle/'assets/PROJECT_RULES.md').read_text(encoding='utf-8')
-        skill = (bundle/'SKILL.md').read_text(encoding='utf-8')
-        global_guide = (bundle/'references/GLOBAL_DEPLOYMENT.md').read_text(encoding='utf-8')
-        deployment = (bundle/'references/DEPLOYMENT.md').read_text(encoding='utf-8')
-        required = (
-            '自然说明实际由哪个角色负责',
-            '协作建议不能阻断项目本身继续执行',
-            '必须使用已验证的 `agent_type`',
-            'Astra 主会话不以 MCP 派工代替模型角色派发',
-            '自然说明实际使用的角色',
-        )
-        for document in (rules, skill, global_guide, deployment):
-            for phrase in required:
-                self.assertIn(phrase, document)
-        self.assertIn('纯核心执行型任务', rules)
-        self.assertIn('只读复核', rules)
-
-    def test_astra_pre_dispatch_requires_human_alignment_brief(self):
-        bundle = Path(__file__).resolve().parents[1]
-        documents = '\n'.join((bundle / relative).read_text(encoding='utf-8') for relative in (
-            'SKILL.md',
-            'assets/PROJECT_RULES.md',
-            'references/GLOBAL_DEPLOYMENT.md',
-            'references/DEPLOYMENT.md',
-        ))
-        for phrase in (
-            '先提炼用户描述的实际问题',
-            '锁定当下任务',
-            '用户要求优先处理的事情',
-            '接下来准备怎么做',
-            '不要求使用固定标题或逐字模板',
-            '问题尚未明确时',
-            '短回复和短任务不提醒',
-            '较长任务未完成问题对齐或协作安排时，检查脚本最多提醒一次',
-            '当前工具必须继续执行',
-            '不得用检查脚本阻止工具或收尾',
-        ):
-            self.assertIn(phrase, documents)
-
+        for relative in ('SKILL.md', 'assets/PROJECT_RULES.md', 'references/GLOBAL_DEPLOYMENT.md', 'references/DEPLOYMENT.md'):
+            document = (bundle / relative).read_text(encoding='utf-8')
+            self.assertIn('实际派工时只额外用一句话说明交给谁、做什么', document)
+            self.assertNotIn('每条实质进度末尾和最终回复末尾', document)
+            self.assertNotIn('开工时显示主会话', document)
+            self.assertNotIn('先提炼用户描述的实际问题', document)
     def test_plain_conversation_does_not_trigger_collaboration(self):
         bundle = Path(__file__).resolve().parents[1]
         documents = '\n'.join((bundle / relative).read_text(encoding='utf-8') for relative in (
@@ -214,7 +160,7 @@ class StrategyTests(unittest.TestCase):
             '普通解释、追问、确认或状态问题',
             '明确的修复、修改、实现、排查或测试请求',
             '直接回答，不触发协作',
-            '明确的修复、修改、实现、排查或测试请求才进入问题对齐',
+            '明确的修复、修改、实现、排查或测试请求才进入协作流程',
             '不进入协作、不派助手、不恢复旧任务',
             '`UserPromptSubmit` 默认静默',
             '`additionalContext` 不得注入命令',
@@ -507,7 +453,7 @@ class AstraTurnGuardTests(unittest.TestCase):
         output = self.run_guard('UserPromptSubmit', prompt=prompt)
         context = output['hookSpecificOutput']['additionalContext']
         self.assertIn('Astra Ultra', context)
-        self.assertIn('开工说明和最终结果', context)
+        self.assertIn('实际派工时用一句话', context)
         self.assertIn('Sol High', context)
         self.assertIn('Luna Explorer Max', context)
         self.assertNotIn('sol_high', context)

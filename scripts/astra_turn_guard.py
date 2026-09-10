@@ -353,7 +353,7 @@ def handle_prompt(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, 
         if isinstance(effort, str) and effort:
             runtime_message = (
                 f"当前回合真实运行值：Astra {EFFORT_DISPLAY.get(effort.lower(), effort)}。"
-                "开工说明和最终结果都使用这个真实值。"
+                "此值仅供路由判断，不要求在回复中展示。"
             )
         else:
             runtime_message = (
@@ -366,8 +366,8 @@ def handle_prompt(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, 
                 runtime_message
                 + "不得使用全局默认值、角色名或历史文字推测。"
                 + f"子角色用户可见名称与档位：{role_values}。"
-                "开工时把计划角色标为计划；收尾只把成功启动的角色写成实际执行。"
-                "已有协作的长任务，每条实质进度和最终回复末尾加一行当前分工，注明已核实的角色档位、职责及状态；不额外轮询或发送消息，不照抄计划为实际。"
+                "实际派工时用一句话告知交给谁、做什么；只陈述真实派工。"
+                "其余输出保持 Codex 默认表达，不规定开头、过程、结论的格式或示例，不要求重复分工。"
             ),
         }}
     return {}
@@ -411,7 +411,7 @@ def handle_pre_tool(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str
         if transcript_has_visible_preamble(payload):
             message = "这是较长任务，问题和计划已说明；建议再安排合适角色协作。"
         else:
-            message = "这是较长任务，建议先提炼实际问题、明确优先事项和行动计划，再安排合适角色。"
+            message = "这是较长任务，可按任务需要安排合适角色协作。"
         return {"systemMessage": message + "小任务直接完成，不为流程创建助手。大任务优先让一个匹配角色完成实现和相关测试；复用已有助手，独立新任务仅传精简交接。主会话不重复调查，只做必要审查与一次验收；等待完成通知，不反复轮询。角色按任务选择 Luna Max、Terra Max 或 Sol High。这只是提醒，当前工具仍会继续执行。"}
     return {}
 
