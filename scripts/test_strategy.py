@@ -122,10 +122,18 @@ class StrategyTests(unittest.TestCase):
         guide = (bundle/'references/GLOBAL_DEPLOYMENT.md').read_text(encoding='utf-8')
         trigger = 'medium、high、xhigh、max 或 ultra'
         self.assertIn(trigger, rules)
-        self.assertIn('明确执行型任务触发后应优先真正派工', rules)
+        self.assertIn('Astra Medium 及以上的明确执行型任务必须先真正派工', rules)
         self.assertIn(trigger, guide)
         self.assertNotIn('极小任务可由主会话直接完成', rules)
         self.assertNotIn('Astra low 或非 Astra 主会话不强制触发', rules)
+
+    def test_medium_execution_has_no_small_or_core_task_exemption(self):
+        bundle = Path(__file__).resolve().parents[1]
+        for relative in ('SKILL.md', 'assets/PROJECT_RULES.md', 'references/GLOBAL_DEPLOYMENT.md'):
+            rules = (bundle / relative).read_text(encoding='utf-8')
+            self.assertIn('Astra Medium 及以上的明确执行任务不论大小都要真实派工', rules)
+            self.assertNotIn('小任务可直接做', rules)
+            self.assertNotIn('纯核心执行型任务按风险决定是否需要独立只读复核', rules)
 
     def test_non_astra_never_claims_astra_route(self):
         bundle = Path(__file__).resolve().parents[1]
