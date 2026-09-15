@@ -412,7 +412,7 @@ def handle_pre_tool(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str
             message = "这是较长任务，问题和计划已说明；建议再安排合适角色协作。"
         else:
             message = "这是较长任务，可按任务需要安排合适角色协作。"
-        return {"systemMessage": message + "小任务直接完成，不为流程创建助手。大任务优先让一个匹配角色完成实现和相关测试；复用已有助手，独立新任务仅传精简交接。主会话不重复调查，只做必要审查与一次验收；等待完成通知，不反复轮询。角色按任务选择 Luna Max、Terra Max 或 Sol High。这只是提醒，当前工具仍会继续执行。"}
+        return {"systemMessage": message + "Astra Medium 及以上的明确执行任务不论大小都应先真实派工；Low 和普通交流可直接处理。复用已有助手，独立新任务仅传精简交接。主会话不重复调查，只做必要审查与一次验收；等待完成通知，不反复轮询。角色按任务选择 Luna Max、Terra Max 或 Sol High。这只是提醒，当前工具仍会继续执行。"}
     return {}
 
 
