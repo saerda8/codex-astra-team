@@ -29,7 +29,7 @@ GPT worker 是执行本文件的代理名称，本文件不假定它就是某个
 
 默认修改用户级 Codex 配置、用户级六个角色和全局 AGENTS 规则，使所有项目的新任务自动继承；项目隔离部署仅在用户明确要求时使用。不新建常驻 MCP 服务、不注册第三方账号、不引入外部 API 调度器。Skill 是部署与维护入口；仅安装 Skill 不代表策略已经启用。全局具体流程以 `GLOBAL_DEPLOYMENT.md` 为准，本文件其余项目级路径用于可选的隔离部署。
 
-全局运行触发条件固定为：主会话使用 `gpt-6-astra` 且推理档位为 low、medium、high、xhigh、max 或 ultra。从 Astra Low 起进入协作路由，以便额度较低的 Plus、Teams 五小时制账号尽早把执行工作交给 Sol、Terra、Luna。普通解释、追问、确认或状态问题直接回答，不触发协作、不调用 `spawn_agent`，也不恢复旧任务；非 Astra 主会话不触发本策略。
+全局运行触发条件固定为：主会话使用 `gpt-6-astra` 且推理档位为 medium、high、xhigh、max 或 ultra。从 Astra Medium 起进入协作路由；Low 仍可直接完成。普通解释、追问、确认或状态问题直接回答，不触发协作、不调用 `spawn_agent`，也不恢复旧任务；非 Astra 主会话不触发本策略。
 
 未明确确认主会话是 `gpt-6-astra` 且档位符合条件时，禁止输出 `本次路由：Astra`，禁止按 Astra 规则强制派工；按当前真实模型及通用规则正常执行。
 

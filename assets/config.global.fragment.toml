@@ -1,6 +1,6 @@
 # Merge into the user-level Codex config; preserve unrelated settings.
 # Example defaults only: preserve the user's selected model and effort.
-# Astra Low and above evaluates routing; small tasks can run directly.
+# Astra Medium and above evaluates routing; Low can run directly.
 model = "gpt-6-astra"
 model_reasoning_effort = "high"
 

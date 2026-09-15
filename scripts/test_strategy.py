@@ -116,11 +116,11 @@ class StrategyTests(unittest.TestCase):
             source = (bundle / relative).read_text(encoding='utf-8')
             self.assertNotIn('"permissionDecision": "deny"', source, relative)
             self.assertNotIn('"decision": "block"', source, relative)
-    def test_astra_low_or_higher_routes_execution_work(self):
+    def test_astra_medium_or_higher_routes_execution_work(self):
         bundle = Path(__file__).resolve().parents[1]
         rules = (bundle/'assets/PROJECT_RULES.md').read_text(encoding='utf-8')
         guide = (bundle/'references/GLOBAL_DEPLOYMENT.md').read_text(encoding='utf-8')
-        trigger = 'low、medium、high、xhigh、max 或 ultra'
+        trigger = 'medium、high、xhigh、max 或 ultra'
         self.assertIn(trigger, rules)
         self.assertIn('明确执行型任务触发后应优先真正派工', rules)
         self.assertIn(trigger, guide)
@@ -550,9 +550,9 @@ class AstraTurnGuardTests(unittest.TestCase):
         output = self.run_guard('PreToolUse', tool_name='Bash', tool_input={'command': 'echo x'}, tool_use_id='tool-1')
         self.assertEqual(output, {})
 
-    def test_low_astra_receives_actual_context_and_can_route(self):
+    def test_low_astra_does_not_route_execution_work(self):
         output = self.register_turn(effort='low')
-        self.assertIn('Astra Low', output['hookSpecificOutput']['additionalContext'])
+        self.assertEqual(output, {})
         output = self.run_guard('PreToolUse', tool_name='Bash', tool_input={'command': 'echo x'}, tool_use_id='tool-1')
         self.assertEqual(output, {})
 

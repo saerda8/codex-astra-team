@@ -6,7 +6,7 @@ Codex 多模型协作技能：Astra 负责关键判断，Sol / Terra / Luna 完�
 
 ## 功能
 
-- Astra Low 起适用协作策略，小任务不为流程创建助手。
+- Astra Medium 起适用协作策略，Low 可直接完成；小任务不为流程创建助手。
 - Sol High / XHigh、Terra Max、Luna Max 角色模板。
 - 实际派工时告知交给谁、做什么；不规定其他回复的格式。
 - 非阻断钩子：只记录和提醒，不拒绝工具、不阻止结束。

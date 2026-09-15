@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any
 
 ASTRA_MODEL = "gpt-6-astra"
-FORCED_EFFORTS = {"low", "medium", "high", "xhigh", "max", "ultra"}
+FORCED_EFFORTS = {"medium", "high", "xhigh", "max", "ultra"}
 LONG_TASK_MIN_CHARS = 80
 ROLE_RUNTIME = {
     "sol_high": ("gpt-5.6-sol", "high"),
