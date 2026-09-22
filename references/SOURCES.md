@@ -1,6 +1,6 @@
 # 官方资料与核验边界
 
-资料核对日期：2026-09-06。部署时重新核对当前文档与本机版本，不根据旧版截图猜字段。
+资料核对日期：2026-09-23。部署时重新核对当前文档与本机版本，不根据旧版截图猜字段。
 
 | 编号 | 来源 | 本方案引用的内容 |
 |---|---|---|
@@ -15,6 +15,9 @@
 | S9 | `https://developers.openai.com/codex/guides/agents-md` | AGENTS 指令文件发现、覆盖关系及会话加载 |
 | S10 | `https://developers.openai.com/codex/skills` | 本地 Skill 目录、SKILL.md 与 .agents/skills |
 | S11 | `https://openai.com/index/gpt-5-6/` | GPT-5.6 发布说明中 Work / Codex 的 max 设置与可用性说明 |
+| S12 | `https://developers.openai.com/api/docs/models/gpt-6-sol` | GPT-6 Sol 标识、复杂编码与代理工作流定位、推理档位、上下文和 API 价格 |
+| S13 | `https://developers.openai.com/api/docs/models/gpt-6-luna` | GPT-6 Luna 标识、聚焦高频任务定位、High / XHigh / Max 支持、上下文和 API 价格 |
+| S14 | `https://developers.openai.com/api/docs/guides/model-selection` | Luna / Sol / Astra 的官方任务定位与按准确率、成本和延迟选择模型的原则 |
 
 Codex 文档链接可能跳转到官方 learn.chatgpt.com 对应页面。
 

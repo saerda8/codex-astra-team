@@ -106,6 +106,12 @@ class StrategyTests(unittest.TestCase):
         hook_fragment = json.loads((bundle/'assets/hooks.global.fragment.json').read_text(encoding='utf-8'))
         self.assertIn('[agents.astra_xhigh]', global_fragment)
         self.assertIn('config_file = "./agents/astra_xhigh.toml"', global_fragment)
+        for role, effort in (
+            ('luna6_high', 'high'), ('luna6_xhigh', 'xhigh'), ('luna6_max', 'max'),
+        ):
+            self.assertIn(f'[agents.{role}]', global_fragment)
+            self.assertIn(f'config_file = "./agents/{role}.toml"', global_fragment)
+            self.assertEqual(model_guard.EXPECTED[role], ('gpt-6-luna', effort))
         self.assertIn('必须使用已验证的 `agent_type`', global_guide)
         for event in ('UserPromptSubmit', 'PreToolUse', 'SubagentStart', 'Stop'):
             self.assertIn(event, hook_fragment['hooks'])
@@ -122,20 +128,32 @@ class StrategyTests(unittest.TestCase):
         guide = (bundle/'references/GLOBAL_DEPLOYMENT.md').read_text(encoding='utf-8')
         trigger = 'medium、high、xhigh、max 或 ultra'
         self.assertIn(trigger, rules)
-        self.assertIn('Astra Medium 及以上的明确执行型任务必须先真正派工', rules)
+        self.assertIn('GPT-6 Astra 或 Sol 在 Medium 及以上的明确执行型任务必须先真正派工', rules)
         self.assertIn(trigger, guide)
         self.assertNotIn('极小任务可由主会话直接完成', rules)
         self.assertNotIn('Astra low 或非 Astra 主会话不强制触发', rules)
+
+    def test_gpt6_sol_and_luna_are_documented_without_equivalence_claim(self):
+        bundle = Path(__file__).resolve().parents[1]
+        documents = '\n'.join((bundle / relative).read_text(encoding='utf-8') for relative in (
+            'SKILL.md', 'assets/PROJECT_RULES.md', 'references/GLOBAL_DEPLOYMENT.md',
+        ))
+        self.assertIn('gpt-6-sol', documents)
+        self.assertIn('gpt-6-luna', documents)
+        self.assertIn('luna6_high', documents)
+        self.assertIn('luna6_xhigh', documents)
+        self.assertIn('luna6_max', documents)
+        self.assertIn('官方未声明 GPT-6 Luna 与 GPT-5.6 Terra 能力相同', documents)
 
     def test_medium_execution_has_no_small_or_core_task_exemption(self):
         bundle = Path(__file__).resolve().parents[1]
         for relative in ('SKILL.md', 'assets/PROJECT_RULES.md', 'references/GLOBAL_DEPLOYMENT.md'):
             rules = (bundle / relative).read_text(encoding='utf-8')
-            self.assertIn('Astra Medium 及以上的明确执行任务不论大小都要真实派工', rules)
+            self.assertIn('Medium 及以上的明确执行任务不论大小都要真实派工', rules)
             self.assertNotIn('小任务可直接做', rules)
             self.assertNotIn('纯核心执行型任务按风险决定是否需要独立只读复核', rules)
 
-    def test_non_astra_never_claims_astra_route(self):
+    def test_non_controller_never_claims_gpt6_route(self):
         bundle = Path(__file__).resolve().parents[1]
         documents = '\n'.join((bundle / relative).read_text(encoding='utf-8') for relative in (
             'SKILL.md',
@@ -144,7 +162,7 @@ class StrategyTests(unittest.TestCase):
             'references/DEPLOYMENT.md',
         ))
         self.assertIn(
-            '未明确确认主会话是 `gpt-6-astra` 且档位符合条件时，禁止输出 `本次路由：Astra`，禁止按 Astra 规则强制派工',
+            '未明确确认主会话是 `gpt-6-astra` 或 `gpt-6-sol` 且档位符合条件时，禁止声称触发 GPT-6 协作路由',
             documents,
         )
 
@@ -233,7 +251,7 @@ class StrategyTests(unittest.TestCase):
     def test_catalog_all_combinations(self):
         p=self.base/'catalog.json'
         models={}
-        for m,e in set(model_guard.EXPECTED.values())|{('gpt-6-astra','high')}:
+        for m,e in set(model_guard.EXPECTED.values())|{('gpt-6-astra','high'),('gpt-6-sol','high')}:
             models.setdefault(m,[]).append({'reasoningEffort':e})
         p.write_text(json.dumps({'result':{'data':[{'model':m,'supportedReasoningEfforts':es} for m,es in models.items()],'nextCursor':None}}))
         with contextlib.redirect_stdout(io.StringIO()): self.assertTrue(strategy.catalog_check(p))
@@ -561,9 +579,38 @@ class AstraTurnGuardTests(unittest.TestCase):
     def test_low_astra_does_not_route_execution_work(self):
         output = self.register_turn(effort='low')
         self.assertEqual(output, {})
-        output = self.run_guard('PreToolUse', tool_name='Bash', tool_input={'command': 'echo x'}, tool_use_id='tool-1')
+        output = self.run_guard(
+            'PreToolUse', tool_name='Bash',
+            tool_input={'command': 'echo x'}, tool_use_id='tool-1',
+        )
         self.assertEqual(output, {})
 
+    def test_gpt6_sol_medium_routes_and_low_does_not(self):
+        self.write_turn(model='gpt-6-sol', effort='medium')
+        medium = self.run_guard(
+            'UserPromptSubmit', model='gpt-6-sol', prompt='请修改这个脚本并运行测试',
+        )
+        self.assertIn('Sol 6 Medium', medium['hookSpecificOutput']['additionalContext'])
+        for role in ('Luna 6 High', 'Luna 6 XHigh', 'Luna 6 Max'):
+            self.assertIn(role, medium['hookSpecificOutput']['additionalContext'])
+
+        self.turn = 'sol-low-turn'
+        self.write_turn(model='gpt-6-sol', effort='low')
+        low = self.run_guard(
+            'UserPromptSubmit', model='gpt-6-sol', prompt='请修改这个脚本并运行测试',
+        )
+        self.assertEqual(low, {})
+
+    def test_each_gpt6_luna_role_satisfies_delegation(self):
+        for role in ('luna6_high', 'luna6_xhigh', 'luna6_max'):
+            self.turn = f'turn-{role}'
+            self.register_turn()
+            self.run_guard('SubagentStart', agent_id=f'{role}-child', agent_type=role)
+            output = self.run_guard(
+                'PreToolUse', tool_name='apply_patch',
+                tool_input={'command': 'patch'}, tool_use_id=f'tool-{role}',
+            )
+            self.assertEqual(output, {}, role)
     def test_unknown_effort_does_not_block_astra(self):
         output = self.run_guard('UserPromptSubmit', prompt='继续')
         context = output['hookSpecificOutput']['additionalContext']

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Turn-scoped Astra delegation guard for Codex hooks."""
+"""Turn-scoped GPT-6 controller delegation guard for Codex hooks."""
 from __future__ import annotations
 
 import json
@@ -11,13 +11,17 @@ import time
 from pathlib import Path
 from typing import Any
 
-ASTRA_MODEL = "gpt-6-astra"
+CONTROLLER_MODELS = ("gpt-6-astra", "gpt-6-sol")
+CONTROLLER_DISPLAY = {"gpt-6-astra": "Astra", "gpt-6-sol": "Sol 6"}
 FORCED_EFFORTS = {"medium", "high", "xhigh", "max", "ultra"}
 LONG_TASK_MIN_CHARS = 80
 ROLE_RUNTIME = {
     "sol_high": ("gpt-5.6-sol", "high"),
     "sol_xhigh": ("gpt-5.6-sol", "xhigh"),
     "terra_max": ("gpt-5.6-terra", "max"),
+    "luna6_high": ("gpt-6-luna", "high"),
+    "luna6_xhigh": ("gpt-6-luna", "xhigh"),
+    "luna6_max": ("gpt-6-luna", "max"),
     "luna_max": ("gpt-5.6-luna", "max"),
     "luna_explorer_max": ("gpt-5.6-luna", "max"),
 }
@@ -26,6 +30,9 @@ ROLE_DISPLAY = {
     "sol_high": "Sol High",
     "sol_xhigh": "Sol XHigh",
     "terra_max": "Terra Max",
+    "luna6_high": "Luna 6 High",
+    "luna6_xhigh": "Luna 6 XHigh",
+    "luna6_max": "Luna 6 Max",
     "luna_max": "Luna Max",
     "luna_explorer_max": "Luna Explorer Max",
 }
@@ -62,7 +69,7 @@ PLAN_ALIGNMENT = re.compile(
     r"修正|修复|排查|验证|测试|检查|处理|调整|去掉|保留"
 )
 ROLE_ALIGNMENT = re.compile(
-    r"sol_high|sol_xhigh|terra_max|luna_max|luna_explorer_max|"
+    r"sol_high|sol_xhigh|terra_max|luna6_high|luna6_xhigh|luna6_max|luna_max|luna_explorer_max|"
     r"Sol|Terra|Luna",
     re.IGNORECASE,
 )
@@ -100,15 +107,15 @@ def reconcile_recorded_children(db: sqlite3.Connection) -> None:
     """Link SubagentStart rows written with a child turn id to their parent turn."""
     children = db.execute(
         "SELECT rowid, session_id, agent_id, agent_type, updated_at FROM turns "
-        "WHERE status='delegated' AND model<>? AND agent_id IS NOT NULL",
-        (ASTRA_MODEL,),
+        "WHERE status='delegated' AND model NOT IN (?, ?) AND agent_id IS NOT NULL",
+        CONTROLLER_MODELS,
     ).fetchall()
     for child_rowid, session_id, agent_id, agent_type, child_time in children:
         parent = db.execute(
-            "SELECT rowid, turn_id FROM turns WHERE session_id=? AND model=? "
+            "SELECT rowid, turn_id FROM turns WHERE session_id=? AND model IN (?, ?) "
             "AND status IN ('pending', 'watching') AND rowid<? AND ABS(updated_at-?)<=3600 "
             "ORDER BY rowid DESC LIMIT 1",
-            (session_id, ASTRA_MODEL, child_rowid, child_time),
+            (session_id, *CONTROLLER_MODELS, child_rowid, child_time),
         ).fetchone()
         if parent is None:
             continue
@@ -338,7 +345,8 @@ def resolve_turn(db: sqlite3.Connection, payload: dict[str, Any]) -> dict[str, A
 
 
 def handle_prompt(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, Any]:
-    if payload.get("agent_type") or payload.get("model") != ASTRA_MODEL:
+    model = payload.get("model")
+    if payload.get("agent_type") or model not in CONTROLLER_MODELS:
         return {}
     prompt = payload.get("prompt")
     action = requires_collaboration(prompt)
@@ -352,7 +360,7 @@ def handle_prompt(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, 
         role_values = "；".join(ROLE_DISPLAY.values())
         if isinstance(effort, str) and effort:
             runtime_message = (
-                f"当前回合真实运行值：Astra {EFFORT_DISPLAY.get(effort.lower(), effort)}。"
+                f"当前回合真实运行值：{CONTROLLER_DISPLAY[model]} {EFFORT_DISPLAY.get(effort.lower(), effort)}。"
                 "此值仅供路由判断，不要求在回复中展示。"
             )
         else:
@@ -386,7 +394,7 @@ def sustained_work(db: sqlite3.Connection, payload: dict[str, Any]) -> bool:
 
 
 def handle_pre_tool(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, Any]:
-    if payload.get("agent_type") or payload.get("model") != ASTRA_MODEL:
+    if payload.get("agent_type") or payload.get("model") not in CONTROLLER_MODELS:
         return {}
     turn = resolve_turn(db, payload)
     if turn.get("status") != "delegated" and record_transcript_delegation(db, payload):
@@ -412,7 +420,7 @@ def handle_pre_tool(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str
             message = "这是较长任务，问题和计划已说明；建议再安排合适角色协作。"
         else:
             message = "这是较长任务，可按任务需要安排合适角色协作。"
-        return {"systemMessage": message + "Astra Medium 及以上的明确执行任务不论大小都应先真实派工；Low 和普通交流可直接处理。复用已有助手，独立新任务仅传精简交接。主会话不重复调查，只做必要审查与一次验收；等待完成通知，不反复轮询。角色按任务选择 Luna Max、Terra Max 或 Sol High。这只是提醒，当前工具仍会继续执行。"}
+        return {"systemMessage": message + "GPT-6 Astra 或 Sol 在 Medium 及以上的明确执行任务不论大小都应先真实派工；Low 和普通交流可直接处理。复用已有助手，独立新任务仅传精简交接。主会话不重复调查，只做必要审查与一次验收；等待完成通知，不反复轮询。GPT-6 Luna 按任务复杂度选择 High、XHigh 或 Max，也可按任务选择旧 Luna、Terra 或 Sol 角色。这只是提醒，当前工具仍会继续执行。"}
     return {}
 
 
@@ -423,15 +431,15 @@ def handle_subagent_start(payload: dict[str, Any], db: sqlite3.Connection) -> di
     session_id = str(payload.get("session_id", ""))
     event_turn_id = str(payload.get("turn_id", ""))
     parent = db.execute(
-        "SELECT turn_id FROM turns WHERE session_id=? AND model=? AND status IN ('pending', 'watching') "
+        "SELECT turn_id FROM turns WHERE session_id=? AND model IN (?, ?) AND status IN ('pending', 'watching') "
         "AND turn_id=?",
-        (session_id, ASTRA_MODEL, event_turn_id),
+        (session_id, *CONTROLLER_MODELS, event_turn_id),
     ).fetchone()
     if parent is None:
         parent = db.execute(
-            "SELECT turn_id FROM turns WHERE session_id=? AND model=? AND status IN ('pending', 'watching') "
+            "SELECT turn_id FROM turns WHERE session_id=? AND model IN (?, ?) AND status IN ('pending', 'watching') "
             "ORDER BY rowid DESC LIMIT 1",
-            (session_id, ASTRA_MODEL),
+            (session_id, *CONTROLLER_MODELS),
         ).fetchone()
     if parent is None:
         return {}
@@ -445,7 +453,7 @@ def handle_subagent_start(payload: dict[str, Any], db: sqlite3.Connection) -> di
 
 
 def handle_stop(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, Any]:
-    if payload.get("agent_type") or payload.get("model") != ASTRA_MODEL:
+    if payload.get("agent_type") or payload.get("model") not in CONTROLLER_MODELS:
         return {}
     turn = resolve_turn(db, payload)
     if turn.get("status") != "delegated" and record_transcript_delegation(db, payload):

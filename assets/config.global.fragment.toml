@@ -1,6 +1,6 @@
 # Merge into the user-level Codex config; preserve unrelated settings.
 # Example defaults only: preserve the user's selected model and effort.
-# Astra Medium and above evaluates routing; Low can run directly.
+# GPT-6 Astra or Sol at Medium and above evaluates routing; Low can run directly.
 model = "gpt-6-astra"
 model_reasoning_effort = "high"
 
@@ -25,6 +25,18 @@ config_file = "./agents/sol_xhigh.toml"
 [agents.terra_max]
 description = "Bounded medium-complexity implementation and integration tests."
 config_file = "./agents/terra_max.toml"
+
+[agents.luna6_high]
+description = "Focused small implementation, precise edits, tests, and routine automation."
+config_file = "./agents/luna6_high.toml"
+
+[agents.luna6_xhigh]
+description = "Coordinated scoped implementation, cross-file updates, diagnosis, and verification."
+config_file = "./agents/luna6_xhigh.toml"
+
+[agents.luna6_max]
+description = "Complex but bounded implementation, deep diagnosis, integration, and strict verification."
+config_file = "./agents/luna6_max.toml"
 
 [agents.luna_max]
 description = "Small scoped changes, repetitive edits, tests, and documentation."

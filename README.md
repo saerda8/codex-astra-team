@@ -1,13 +1,13 @@
-# Codex Astra Team
+# Codex GPT-6 Team
 
-Codex 多模型协作技能：Astra 负责关键判断，Sol / Terra / Luna 完成独立执行任务。Astra Medium 及以上的明确执行任务不论大小先派一个匹配助手；Low 和普通交流可直接处理。
+Codex 多模型协作技能：GPT-6 Astra 或 Sol 作为主会话时，Medium 及以上的明确执行任务不论大小先派一个匹配助手；Low 和普通交流可直接处理。GPT-6 Luna 按 High、XHigh、Max 三档承担不同复杂度的聚焦任务。
 
 社区项目，与 OpenAI 无隶属关系。不提供额度扩容，也不保证固定节省比例。模型和推理档位必须在使用者客户端现场核验。
 
 ## 功能
 
-- Astra Medium 起的明确执行任务不论大小都派工；Low 和普通交流可直接完成。
-- Sol High / XHigh、Terra Max、Luna Max 角色模板。
+- GPT-6 Astra / Sol 从 Medium 起的明确执行任务不论大小都派工；Low 和普通交流可直接完成。
+- GPT-6 Luna High / XHigh / Max，以及原有 Sol、Terra、Luna 角色模板。
 - 实际派工时告知交给谁、做什么；不规定其他回复的格式。
 - 非阻断钩子：只记录和提醒，不拒绝工具、不阻止结束。
 - “继续”等短指令结合实际工具次数观察，重复事件不重复计数。
@@ -40,7 +40,7 @@ python scripts/test_strategy.py -q
 | 路径 | 用途 |
 |---|---|
 | SKILL.md | 技能入口 |
-| assets/ | 可合并的配置、六个角色及规则 |
+| assets/ | 可合并的配置、九个角色及规则 |
 | scripts/astra_turn_guard.py | 非阻断回合观察和提醒 |
 | scripts/model_guard.py | 项目配置审计，不决定工具权限 |
 | scripts/strategy.py | 候选配置、校验、备份、回滚 |

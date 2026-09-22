@@ -13,6 +13,9 @@ EXPECTED = {
     "sol_high": ("gpt-5.6-sol", "high"),
     "sol_xhigh": ("gpt-5.6-sol", "xhigh"),
     "terra_max": ("gpt-5.6-terra", "max"),
+    "luna6_high": ("gpt-6-luna", "high"),
+    "luna6_xhigh": ("gpt-6-luna", "xhigh"),
+    "luna6_max": ("gpt-6-luna", "max"),
     "luna_max": ("gpt-5.6-luna", "max"),
     "luna_explorer_max": ("gpt-5.6-luna", "max"),
 }
