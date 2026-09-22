@@ -112,6 +112,12 @@ class StrategyTests(unittest.TestCase):
             self.assertIn(f'[agents.{role}]', global_fragment)
             self.assertIn(f'config_file = "./agents/{role}.toml"', global_fragment)
             self.assertEqual(model_guard.EXPECTED[role], ('gpt-6-luna', effort))
+        for role, effort in (
+            ('sol6_high', 'high'), ('sol6_xhigh', 'xhigh'), ('sol6_max', 'max'),
+        ):
+            self.assertIn(f'[agents.{role}]', global_fragment)
+            self.assertIn(f'config_file = "./agents/{role}.toml"', global_fragment)
+            self.assertEqual(model_guard.EXPECTED[role], ('gpt-6-sol', effort))
         self.assertIn('必须使用已验证的 `agent_type`', global_guide)
         for event in ('UserPromptSubmit', 'PreToolUse', 'SubagentStart', 'Stop'):
             self.assertIn(event, hook_fragment['hooks'])
@@ -144,6 +150,15 @@ class StrategyTests(unittest.TestCase):
         self.assertIn('luna6_xhigh', documents)
         self.assertIn('luna6_max', documents)
         self.assertIn('官方未声明 GPT-6 Luna 与 GPT-5.6 Terra 能力相同', documents)
+
+    def test_astra_can_delegate_to_sol6_but_sol6_controller_cannot_self_delegate(self):
+        bundle = Path(__file__).resolve().parents[1]
+        documents = '\n'.join((bundle / relative).read_text(encoding='utf-8') for relative in (
+            'SKILL.md', 'assets/PROJECT_RULES.md', 'references/GLOBAL_DEPLOYMENT.md',
+        ))
+        for role in ('sol6_high', 'sol6_xhigh', 'sol6_max'):
+            self.assertIn(role, documents)
+        self.assertIn('GPT-6 Sol 主会话不得派给 sol6_', documents)
 
     def test_medium_execution_has_no_small_or_core_task_exemption(self):
         bundle = Path(__file__).resolve().parents[1]
@@ -593,6 +608,7 @@ class AstraTurnGuardTests(unittest.TestCase):
         self.assertIn('Sol 6 Medium', medium['hookSpecificOutput']['additionalContext'])
         for role in ('Luna 6 High', 'Luna 6 XHigh', 'Luna 6 Max'):
             self.assertIn(role, medium['hookSpecificOutput']['additionalContext'])
+        self.assertNotIn('Sol 6 High', medium['hookSpecificOutput']['additionalContext'])
 
         self.turn = 'sol-low-turn'
         self.write_turn(model='gpt-6-sol', effort='low')
@@ -600,6 +616,23 @@ class AstraTurnGuardTests(unittest.TestCase):
             'UserPromptSubmit', model='gpt-6-sol', prompt='请修改这个脚本并运行测试',
         )
         self.assertEqual(low, {})
+
+    def test_astra_context_includes_each_sol6_role(self):
+        output = self.register_turn(effort='high')
+        context = output['hookSpecificOutput']['additionalContext']
+        for role in ('Sol 6 High', 'Sol 6 XHigh', 'Sol 6 Max'):
+            self.assertIn(role, context)
+
+    def test_each_gpt6_sol_role_satisfies_astra_delegation(self):
+        for role in ('sol6_high', 'sol6_xhigh', 'sol6_max'):
+            self.turn = f'turn-{role}'
+            self.register_turn()
+            self.run_guard('SubagentStart', agent_id=f'{role}-child', agent_type=role)
+            output = self.run_guard(
+                'PreToolUse', tool_name='apply_patch',
+                tool_input={'command': 'patch'}, tool_use_id=f'tool-{role}',
+            )
+            self.assertEqual(output, {}, role)
 
     def test_each_gpt6_luna_role_satisfies_delegation(self):
         for role in ('luna6_high', 'luna6_xhigh', 'luna6_max'):

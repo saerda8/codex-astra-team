@@ -22,6 +22,18 @@ config_file = "./agents/sol_high.toml"
 description = "Difficult module logic and deep debugging within an approved architecture."
 config_file = "./agents/sol_xhigh.toml"
 
+[agents.sol6_high]
+description = "Advanced implementation and module ownership within an approved architecture."
+config_file = "./agents/sol6_high.toml"
+
+[agents.sol6_xhigh]
+description = "Deep debugging, cross-module engineering, and strict technical review."
+config_file = "./agents/sol6_xhigh.toml"
+
+[agents.sol6_max]
+description = "Hardest bounded engineering and exhaustive verification under a settled architecture."
+config_file = "./agents/sol6_max.toml"
+
 [agents.terra_max]
 description = "Bounded medium-complexity implementation and integration tests."
 config_file = "./agents/terra_max.toml"

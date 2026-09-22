@@ -5,7 +5,7 @@
 ## 写入范围
 
 - 增量合并 `assets/config.global.fragment.toml` 到用户级 `config.toml`。
-- 将七个角色文件复制到用户级 `agents/`。
+- 将十二个角色文件复制到用户级 `agents/`。
 - 将 `scripts/astra_turn_guard.py` 安装到用户级 `hooks/`，并把 `assets/hooks.global.fragment.json` 的四类事件增量合并到用户级 `hooks.json`；将 `<CODEX_HOME>` 替换为真实目录，保留现有钩子。
 - 将 `assets/PROJECT_RULES.md` 的标记区间增量合并到用户级 `AGENTS.md`。
 - 将完整 Skill 复制到用户级 `skills/codex-astra-team/`，供以后检查、升级和回滚指导使用。
@@ -37,7 +37,7 @@
 保持 Codex 默认表达方式；本技能不规定开头、中间过程、结论或其他回复的格式、标题、措辞、顺序及示例。实际派工时只额外用一句话说明交给谁、做什么；使用已核实的角色和档位，不猜测，不把计划写成已经执行，不要求在进度或结尾重复。
 
 
-GPT-6 Astra 或 Sol 在 Medium 及以上的明确执行型任务必须先真正派工，不论任务大小，不能只记录路由。核心任务由主会话负责决策和总控，并至少把独立调查、实现、测试或复核之一交给匹配角色。GPT-6 Luna 按复杂度固定分档：简单任务用 High，较复杂任务用 XHigh，复杂但边界明确的任务用 Max；Terra 继续作为平衡型备选，不宣称二者能力相同。非核心复杂任务交 Sol，探索交只读 Luna；协作要求不能阻断项目本身继续执行。
+GPT-6 Astra 或 Sol 在 Medium 及以上的明确执行型任务必须先真正派工。Astra 按复杂度把高级工程执行交给 sol6_high、sol6_xhigh 或 sol6_max。GPT-6 Sol 主会话不得派给 sol6_ 角色来满足派工，应使用 Luna、Terra 或旧 Sol。GPT-6 Luna 按 High、XHigh、Max 分档；Terra 继续作为平衡型备选。
 
 
 

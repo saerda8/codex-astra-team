@@ -7,7 +7,7 @@ Codex 多模型协作技能：GPT-6 Astra 或 Sol 作为主会话时，Medium �
 ## 功能
 
 - GPT-6 Astra / Sol 从 Medium 起的明确执行任务不论大小都派工；Low 和普通交流可直接完成。
-- GPT-6 Luna High / XHigh / Max，以及原有 Sol、Terra、Luna 角色模板。
+- GPT-6 Sol 与 Luna 各有 High / XHigh / Max 固定角色，并保留原有 Sol、Terra、Luna 角色。
 - 实际派工时告知交给谁、做什么；不规定其他回复的格式。
 - 非阻断钩子：只记录和提醒，不拒绝工具、不阻止结束。
 - “继续”等短指令结合实际工具次数观察，重复事件不重复计数。
@@ -40,7 +40,7 @@ python scripts/test_strategy.py -q
 | 路径 | 用途 |
 |---|---|
 | SKILL.md | 技能入口 |
-| assets/ | 可合并的配置、九个角色及规则 |
+| assets/ | 可合并的配置、十二个角色及规则 |
 | scripts/astra_turn_guard.py | 非阻断回合观察和提醒 |
 | scripts/model_guard.py | 项目配置审计，不决定工具权限 |
 | scripts/strategy.py | 候选配置、校验、备份、回滚 |

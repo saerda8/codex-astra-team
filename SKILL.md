@@ -15,6 +15,9 @@ description: Use when installing, upgrading, auditing, or repairing an Astra-led
 | astra_xhigh | gpt-6-astra | xhigh |
 | sol_high | gpt-5.6-sol | high |
 | sol_xhigh | gpt-5.6-sol | xhigh |
+| sol6_high | gpt-6-sol | high |
+| sol6_xhigh | gpt-6-sol | xhigh |
+| sol6_max | gpt-6-sol | max |
 | terra_max | gpt-5.6-terra | max |
 | luna6_high | gpt-6-luna | high |
 | luna6_xhigh | gpt-6-luna | xhigh |
@@ -22,7 +25,7 @@ description: Use when installing, upgrading, auditing, or repairing an Astra-led
 | luna_max | gpt-5.6-luna | max |
 | luna_explorer_max | gpt-5.6-luna | max，只读 |
 
-GPT-6 Astra 主会话负责最难的核心方案、关键机制、重大取舍与关键验收；GPT-6 Sol 主会话负责复杂编码和代理式工作流。两者在 Medium 及以上都要派工。GPT-6 Luna 按复杂度固定分档：简单执行用 High，较复杂的协调修改用 XHigh，复杂但边界明确的工作用 Max。它不替代 Terra，也不宣称与 Terra 能力相同。只由主会话创建子代理；并发上限为两个；子代理关闭进一步派生。
+GPT-6 Astra 主会话负责最难的核心方案、关键机制、重大取舍与关键验收，并按复杂度把高级工程执行交给 Sol 6 High、XHigh 或 Max。GPT-6 Sol 主会话负责复杂编码和代理式工作流，但不得派给 sol6_ 角色来满足派工，应使用 Luna、Terra 或旧 Sol 独立复核。两者在 Medium 及以上都要派工。GPT-6 Luna 按 High、XHigh、Max 分档。只由主会话创建子代理；并发上限为两个。
 
 运行触发条件固定为：主会话是 `gpt-6-astra` 或 `gpt-6-sol`，且推理档位为 medium、high、xhigh、max 或 ultra。从 Medium 起进入协作路由；Low 仍可直接完成。普通解释、追问、确认或状态问题直接回答，不触发协作、不调用 `spawn_agent`，也不恢复旧任务；其他主会话不触发本策略。
 
@@ -67,7 +70,7 @@ MCP 是条件性能力：已加载、健康且适合当前子任务的 MCP 必�
 2. 用真实客户端能力核对模型与推理档位。取得完整 `model/list` 结果后运行 `scripts/strategy.py catalog-check`；不得伪造目录、把 max 映射成 xhigh、或更换计费方式来通过检查。
 3. 运行 `scripts/test_strategy.py` 做离线自检。离线测试只证明脚本逻辑，不证明 Codex 兼容性或账号可用性。
 4. 用 `scripts/strategy.py stage` 在非自动加载目录生成候选文件。全局部署按 `GLOBAL_DEPLOYMENT.md` 分别备份并增量合并；项目隔离部署才使用脚本的项目级 `backup`。不清理未提交修改。
-5. 根据指南增量合并候选文件：主配置、九个角色、`astra_turn_guard.py`、四类全局钩子、项目长期规则、忽略项与使用说明。脚本故意不自动覆盖现有 TOML，由部署代理保留其他配置并审查差异。
+5. 根据指南增量合并候选文件：主配置、十二个角色、`astra_turn_guard.py`、四类全局钩子、项目长期规则、忽略项与使用说明。脚本故意不自动覆盖现有 TOML，由部署代理保留其他配置并审查差异。
 6. 从当前运行时核实 `spawn_agent` 参数结构和钩子输入。当前运行时已经验证角色字段，派发必须使用已验证的 `agent_type` 选择固定角色；`task_name` 只能作为标签。其他运行时若没有角色字段，必须报告协作能力缺失，不得用标签假装派工，只保留不阻断的审计记录。
 7. 调用 `seal` 建立已部署文件的完整性基线，再调用 `verify`。策略锁文件 `.codex/model-policy.json` 是本包自建格式，不是 Codex 原生字段。
 8. 通过正常流程完成项目及钩子信任审核，重新加载新会话。分别用 GPT-6 Astra 和 GPT-6 Sol 做真实正向、负向派发、权限和模型路由验证，并核对每个 Medium 以上任务是否创建了匹配子智能体及可见路由回执；Low 任务可直接完成。不得绕过审批或用合成事件替代真实生效测试。

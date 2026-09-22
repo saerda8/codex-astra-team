@@ -18,6 +18,9 @@ LONG_TASK_MIN_CHARS = 80
 ROLE_RUNTIME = {
     "sol_high": ("gpt-5.6-sol", "high"),
     "sol_xhigh": ("gpt-5.6-sol", "xhigh"),
+    "sol6_high": ("gpt-6-sol", "high"),
+    "sol6_xhigh": ("gpt-6-sol", "xhigh"),
+    "sol6_max": ("gpt-6-sol", "max"),
     "terra_max": ("gpt-5.6-terra", "max"),
     "luna6_high": ("gpt-6-luna", "high"),
     "luna6_xhigh": ("gpt-6-luna", "xhigh"),
@@ -29,6 +32,9 @@ DELEGATE_ROLES = set(ROLE_RUNTIME)
 ROLE_DISPLAY = {
     "sol_high": "Sol High",
     "sol_xhigh": "Sol XHigh",
+    "sol6_high": "Sol 6 High",
+    "sol6_xhigh": "Sol 6 XHigh",
+    "sol6_max": "Sol 6 Max",
     "terra_max": "Terra Max",
     "luna6_high": "Luna 6 High",
     "luna6_xhigh": "Luna 6 XHigh",
@@ -69,7 +75,7 @@ PLAN_ALIGNMENT = re.compile(
     r"修正|修复|排查|验证|测试|检查|处理|调整|去掉|保留"
 )
 ROLE_ALIGNMENT = re.compile(
-    r"sol_high|sol_xhigh|terra_max|luna6_high|luna6_xhigh|luna6_max|luna_max|luna_explorer_max|"
+    r"sol_high|sol_xhigh|sol6_high|sol6_xhigh|sol6_max|terra_max|luna6_high|luna6_xhigh|luna6_max|luna_max|luna_explorer_max|"
     r"Sol|Terra|Luna",
     re.IGNORECASE,
 )
@@ -357,7 +363,10 @@ def handle_prompt(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, 
     status = ("pending" if is_long_task(prompt) else "watching") if eligible and action else "exempt"
     upsert_pending(db, payload, status)
     if action and eligible:
-        role_values = "；".join(ROLE_DISPLAY.values())
+        visible_roles = ROLE_DISPLAY.items()
+        if model == "gpt-6-sol":
+            visible_roles = ((role, label) for role, label in visible_roles if not role.startswith("sol6_"))
+        role_values = "；".join(label for _, label in visible_roles)
         if isinstance(effort, str) and effort:
             runtime_message = (
                 f"当前回合真实运行值：{CONTROLLER_DISPLAY[model]} {EFFORT_DISPLAY.get(effort.lower(), effort)}。"
