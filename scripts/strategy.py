@@ -96,7 +96,7 @@ def static_errors(root: Path) -> list[str]:
     errors = []
     try:
         conf = tomllib.loads(target(root, ".codex/config.toml").read_text(encoding="utf-8"))
-        checks = [(conf.get("model") in {"gpt-6-astra", "gpt-6-sol"}, "main model"),
+        checks = [(conf.get("model") in {"gpt-6-astra", "gpt-6.1-sol"}, "main model"),
                   (conf.get("model_reasoning_effort") in {"medium", "high", "xhigh", "max", "ultra"}, "main effort"),
                   (conf.get("features", {}).get("multi_agent") is True, "multi-agent flag"),
                   (conf.get("features", {}).get("hooks") is True, "hooks flag")]
@@ -207,7 +207,7 @@ def catalog_check(path: Path) -> bool:
         model = item.get("model")
         if model:
             models[model] = {entry.get("reasoningEffort") for entry in item.get("supportedReasoningEfforts", [])}
-    required = set(EXPECTED.values()) | {("gpt-6-astra", "high"), ("gpt-6-sol", "high")}
+    required = set(EXPECTED.values()) | {("gpt-6-astra", "high"), ("gpt-6.1-sol", "high")}
     missing = [{"model": m, "effort": e} for m, e in sorted(required) if e not in models.get(m, set())]
     print(json.dumps({"status": "CATALOG_PASS" if not missing else "CATALOG_BLOCKED",
                       "missing": missing, "actual_calls_verified": False}, indent=2))

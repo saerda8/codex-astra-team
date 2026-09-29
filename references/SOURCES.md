@@ -15,7 +15,8 @@
 | S9 | `https://developers.openai.com/codex/guides/agents-md` | AGENTS 指令文件发现、覆盖关系及会话加载 |
 | S10 | `https://developers.openai.com/codex/skills` | 本地 Skill 目录、SKILL.md 与 .agents/skills |
 | S11 | `https://openai.com/index/gpt-5-6/` | GPT-5.6 发布说明中 Work / Codex 的 max 设置与可用性说明 |
-| S12 | `https://developers.openai.com/api/docs/models/gpt-6-sol` | GPT-6 Sol 标识、复杂编码与代理工作流定位、推理档位、上下文和 API 价格 |
+| S12 | `https://developers.openai.com/api/docs/models/gpt-6-sol` | GPT-6 Sol 家族的官方历史参考；当前运行时 ID 以 S15 的本机目录核验为准 |
+| S15 | 当前 Codex 运行时模型目录 | 部署时现场核验 `gpt-6.1-sol` 是否已提供及其支持档位；当前主机已暴露该模型 ID |
 | S13 | `https://developers.openai.com/api/docs/models/gpt-6-luna` | GPT-6 Luna 标识、聚焦高频任务定位、High / XHigh / Max 支持、上下文和 API 价格 |
 | S14 | `https://developers.openai.com/api/docs/guides/model-selection` | Luna / Sol / Astra 的官方任务定位与按准确率、成本和延迟选择模型的原则 |
 

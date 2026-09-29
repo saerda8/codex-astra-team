@@ -1,6 +1,6 @@
 name = "sol6_high"
 description = "Advanced implementation and module ownership within an approved architecture."
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "high"
 developer_instructions = """
 Own advanced implementation within an approved architecture: module design, complex coding, integration, and ordinary acceptance. Escalate changes to core invariants, architecture, security boundaries, and major public contracts to Astra.

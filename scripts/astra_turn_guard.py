@@ -11,16 +11,16 @@ import time
 from pathlib import Path
 from typing import Any
 
-CONTROLLER_MODELS = ("gpt-6-astra", "gpt-6-sol")
-CONTROLLER_DISPLAY = {"gpt-6-astra": "Astra", "gpt-6-sol": "Sol 6"}
+CONTROLLER_MODELS = ("gpt-6-astra", "gpt-6.1-sol")
+CONTROLLER_DISPLAY = {"gpt-6-astra": "Astra", "gpt-6.1-sol": "Sol 6"}
 FORCED_EFFORTS = {"medium", "high", "xhigh", "max", "ultra"}
 LONG_TASK_MIN_CHARS = 80
 ROLE_RUNTIME = {
     "sol_high": ("gpt-5.6-sol", "high"),
     "sol_xhigh": ("gpt-5.6-sol", "xhigh"),
-    "sol6_high": ("gpt-6-sol", "high"),
-    "sol6_xhigh": ("gpt-6-sol", "xhigh"),
-    "sol6_max": ("gpt-6-sol", "max"),
+    "sol6_high": ("gpt-6.1-sol", "high"),
+    "sol6_xhigh": ("gpt-6.1-sol", "xhigh"),
+    "sol6_max": ("gpt-6.1-sol", "max"),
     "terra_max": ("gpt-5.6-terra", "max"),
     "luna6_high": ("gpt-6-luna", "high"),
     "luna6_xhigh": ("gpt-6-luna", "xhigh"),
@@ -364,7 +364,7 @@ def handle_prompt(payload: dict[str, Any], db: sqlite3.Connection) -> dict[str, 
     upsert_pending(db, payload, status)
     if action and eligible:
         visible_roles = ROLE_DISPLAY.items()
-        if model == "gpt-6-sol":
+        if model == "gpt-6.1-sol":
             visible_roles = ((role, label) for role, label in visible_roles if not role.startswith("sol6_"))
         role_values = "；".join(label for _, label in visible_roles)
         if isinstance(effort, str) and effort:

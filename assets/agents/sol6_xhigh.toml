@@ -1,6 +1,6 @@
 name = "sol6_xhigh"
 description = "Deep debugging, cross-module engineering, and strict technical review."
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "xhigh"
 developer_instructions = """
 Handle deep debugging, difficult cross-module engineering, careful integration, and strict technical review within an approved architecture. Escalate architecture and core-contract changes to Astra.

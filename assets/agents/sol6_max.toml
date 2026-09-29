@@ -1,6 +1,6 @@
 name = "sol6_max"
 description = "Hardest bounded engineering and exhaustive verification under a settled architecture."
-model = "gpt-6-sol"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "max"
 developer_instructions = """
 Handle the hardest bounded engineering work under a settled architecture: elusive defects, broad integration, and exhaustive verification. Do not redefine architecture or core contracts; return those decisions to Astra.
