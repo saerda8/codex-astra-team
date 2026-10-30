@@ -22,6 +22,9 @@ ROLE_RUNTIME = {
     "sol6_xhigh": ("gpt-6.1-sol", "xhigh"),
     "sol6_max": ("gpt-6.1-sol", "max"),
     "terra_max": ("gpt-5.6-terra", "max"),
+    "terra61_high": ("gpt-6.1-terra", "high"),
+    "terra61_xhigh": ("gpt-6.1-terra", "xhigh"),
+    "terra61_max": ("gpt-6.1-terra", "max"),
     "luna6_high": ("gpt-6-luna", "high"),
     "luna6_xhigh": ("gpt-6-luna", "xhigh"),
     "luna6_max": ("gpt-6-luna", "max"),
@@ -36,6 +39,9 @@ ROLE_DISPLAY = {
     "sol6_xhigh": "Sol 6 XHigh",
     "sol6_max": "Sol 6 Max",
     "terra_max": "Terra Max",
+    "terra61_high": "Terra 6.1 High",
+    "terra61_xhigh": "Terra 6.1 XHigh",
+    "terra61_max": "Terra 6.1 Max",
     "luna6_high": "Luna 6 High",
     "luna6_xhigh": "Luna 6 XHigh",
     "luna6_max": "Luna 6 Max",
@@ -75,7 +81,7 @@ PLAN_ALIGNMENT = re.compile(
     r"修正|修复|排查|验证|测试|检查|处理|调整|去掉|保留"
 )
 ROLE_ALIGNMENT = re.compile(
-    r"sol_high|sol_xhigh|sol6_high|sol6_xhigh|sol6_max|terra_max|luna6_high|luna6_xhigh|luna6_max|luna_max|luna_explorer_max|"
+    r"sol_high|sol_xhigh|sol6_high|sol6_xhigh|sol6_max|terra61_high|terra61_xhigh|terra61_max|terra_max|luna6_high|luna6_xhigh|luna6_max|luna_max|luna_explorer_max|"
     r"Sol|Terra|Luna",
     re.IGNORECASE,
 )

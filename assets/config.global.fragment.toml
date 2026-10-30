@@ -38,6 +38,18 @@ config_file = "./agents/sol6_max.toml"
 description = "Bounded medium-complexity implementation and integration tests."
 config_file = "./agents/terra_max.toml"
 
+[agents.terra61_high]
+description = "Balanced medium complexity implementation and integration work with GPT-6.1 Terra."
+config_file = "./agents/terra61_high.toml"
+
+[agents.terra61_xhigh]
+description = "Careful cross-file implementation, diagnosis, and review with GPT-6.1 Terra."
+config_file = "./agents/terra61_xhigh.toml"
+
+[agents.terra61_max]
+description = "Harder bounded implementation and exhaustive integration verification with GPT-6.1 Terra."
+config_file = "./agents/terra61_max.toml"
+
 [agents.luna6_high]
 description = "Focused small implementation, precise edits, tests, and routine automation."
 config_file = "./agents/luna6_high.toml"

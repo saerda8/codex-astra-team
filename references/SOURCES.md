@@ -1,6 +1,6 @@
 # 官方资料与核验边界
 
-资料核对日期：2026-09-23。部署时重新核对当前文档与本机版本，不根据旧版截图猜字段。
+资料核对日期：2026-10-30。部署时重新核对当前文档与本机版本，不根据旧版截图猜字段。
 
 | 编号 | 来源 | 本方案引用的内容 |
 |---|---|---|
@@ -19,6 +19,7 @@
 | S15 | 当前 Codex 运行时模型目录 | 部署时现场核验 `gpt-6.1-sol` 是否已提供及其支持档位；当前主机已暴露该模型 ID |
 | S13 | `https://developers.openai.com/api/docs/models/gpt-6-luna` | GPT-6 Luna 标识、聚焦高频任务定位、High / XHigh / Max 支持、上下文和 API 价格 |
 | S14 | `https://developers.openai.com/api/docs/guides/model-selection` | Luna / Sol / Astra 的官方任务定位与按准确率、成本和延迟选择模型的原则 |
+| S16 | 当前 Codex 运行时模型目录 | 部署时现场核验 `gpt-6.1-terra` 是否已提供及其支持档位；当前主机已暴露该模型 ID |
 
 Codex 文档链接可能跳转到官方 learn.chatgpt.com 对应页面。
 

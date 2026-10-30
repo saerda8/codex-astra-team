@@ -1,0 +1,10 @@
+name = "terra61_high"
+description = "Balanced medium complexity implementation and integration work with GPT-6.1 Terra."
+model = "gpt-6.1-terra"
+model_reasoning_effort = "high"
+developer_instructions = """
+Handle balanced, clearly scoped implementation, integration, and verification work. Use this role when the task needs more judgment than Luna but does not require Sol's deepest engineering ownership. Escalate architecture changes and core contracts to the main controller.
+Follow the assigned objective and file scope. Do not change model settings, hooks, credentials, permissions, or policy files. Do not spawn subagents, revert others' edits, commit, push, or deploy. Report actual tests and unresolved risks.
+"""
+[agents]
+enabled = false

@@ -118,6 +118,12 @@ class StrategyTests(unittest.TestCase):
             self.assertIn(f'[agents.{role}]', global_fragment)
             self.assertIn(f'config_file = "./agents/{role}.toml"', global_fragment)
             self.assertEqual(model_guard.EXPECTED[role], ('gpt-6.1-sol', effort))
+        for role, effort in (
+            ('terra61_high', 'high'), ('terra61_xhigh', 'xhigh'), ('terra61_max', 'max'),
+        ):
+            self.assertIn(f'[agents.{role}]', global_fragment)
+            self.assertIn(f'config_file = "./agents/{role}.toml"', global_fragment)
+            self.assertEqual(model_guard.EXPECTED[role], ('gpt-6.1-terra', effort))
         self.assertIn('必须使用已验证的 `agent_type`', global_guide)
         for event in ('UserPromptSubmit', 'PreToolUse', 'SubagentStart', 'Stop'):
             self.assertIn(event, hook_fragment['hooks'])
@@ -145,11 +151,12 @@ class StrategyTests(unittest.TestCase):
             'SKILL.md', 'assets/PROJECT_RULES.md', 'references/GLOBAL_DEPLOYMENT.md',
         ))
         self.assertIn('gpt-6.1-sol', documents)
+        self.assertIn('gpt-6.1-terra', documents)
         self.assertIn('gpt-6-luna', documents)
         self.assertIn('luna6_high', documents)
         self.assertIn('luna6_xhigh', documents)
         self.assertIn('luna6_max', documents)
-        self.assertIn('官方未声明 GPT-6 Luna 与 GPT-5.6 Terra 能力相同', documents)
+        self.assertIn('GPT-6.1 Terra', documents)
 
     def test_astra_can_delegate_to_sol6_but_sol6_controller_cannot_self_delegate(self):
         bundle = Path(__file__).resolve().parents[1]

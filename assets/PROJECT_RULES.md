@@ -16,7 +16,7 @@ GPT-6 Astra 主会话负责总体架构、核心机制、重大技术选择、�
 
 GPT-6 Astra 主会话按复杂度把高级工程执行交给 sol6_high、sol6_xhigh 或 sol6_max。GPT-6 Sol 主会话不得派给 sol6_ 角色来满足派工，应使用 Luna、Terra 或旧 Sol 做执行与独立复核。GPT-5.6 Sol 角色继续作为兼容与交叉验证备选。
 
-GPT-6 Luna 按复杂度固定分档：简单、边界清楚的执行用 luna6_high；较复杂的协调修改、诊断与验证用 luna6_xhigh；复杂但架构和边界已确定的工作用 luna6_max。terra_max 继续保留为平衡型备选。局部重复修改、测试和文档也可交给 luna_max；只读定位交给 luna_explorer_max。不得在派工时静默改变角色档位。官方未声明 GPT-6 Luna 与 GPT-5.6 Terra 能力相同，因此不得写成等价替换。
+GPT-6 Luna 按复杂度固定分档：简单、边界清楚的执行用 luna6_high；较复杂的协调修改、诊断与验证用 luna6_xhigh；复杂但架构和边界已确定的工作用 luna6_max。GPT-6.1 Terra 按 High、XHigh、Max 处理平衡型中等任务；terra_max 继续保留为兼容备选。局部重复修改、测试和文档也可交给 luna_max；只读定位交给 luna_explorer_max。不得在派工时静默改变角色档位。
 
 先判断是否涉及核心决策，再判断执行复杂度；不按代码行数决定等级。非核心任务不需要让 Astra 重复完整审查。不要求每项任务经过所有模型，不按 Luna→Terra→Sol→Astra 逐级失败来路由。
 
