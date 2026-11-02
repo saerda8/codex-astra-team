@@ -1,6 +1,6 @@
 # 官方资料与核验边界
 
-资料核对日期：2026-10-30。部署时重新核对当前文档与本机版本，不根据旧版截图猜字段。
+资料核对日期：2026-11-02。部署时重新核对当前文档与本机版本，不根据旧版截图猜字段。
 
 | 编号 | 来源 | 本方案引用的内容 |
 |---|---|---|
@@ -9,12 +9,12 @@
 | S3 | `https://learn.chatgpt.com/docs/hooks` | PreToolUse 事件、spawn_agent/Agent 匹配、deny 响应、信任审核与覆盖边界 |
 | S4 | `https://developers.openai.com/codex/app-server` | model/list 的 supportedReasoningEfforts 和分页、config/read |
 | S5 | `https://developers.openai.com/api/docs/models/gpt-6-astra` | 模型标识及 low / medium / high / xhigh / max |
-| S6 | `https://developers.openai.com/api/docs/models/gpt-5.6-sol` | 模型标识与模型定位；完整可用档位由目标客户端核验 |
-| S7 | `https://developers.openai.com/api/docs/models/gpt-5.6-terra` | 模型标识与模型定位；完整可用档位由目标客户端核验 |
-| S8 | `https://developers.openai.com/api/docs/models/gpt-5.6-luna` | 模型标识与模型定位；完整可用档位由目标客户端核验 |
+| S6 | `https://developers.openai.com/api/docs/models/gpt-5.6-sol` | 历史模型参考；活动配置已迁移到当前 6.x 运行角色 |
+| S7 | `https://developers.openai.com/api/docs/models/gpt-5.6-terra` | 历史模型参考；活动配置已迁移到当前 6.1 Terra 角色 |
+| S8 | `https://developers.openai.com/api/docs/models/gpt-5.6-luna` | 历史模型参考；活动配置已迁移到当前 GPT-6 Luna 角色 |
 | S9 | `https://developers.openai.com/codex/guides/agents-md` | AGENTS 指令文件发现、覆盖关系及会话加载 |
 | S10 | `https://developers.openai.com/codex/skills` | 本地 Skill 目录、SKILL.md 与 .agents/skills |
-| S11 | `https://openai.com/index/gpt-5-6/` | GPT-5.6 发布说明中 Work / Codex 的 max 设置与可用性说明 |
+| S11 | `https://openai.com/index/gpt-5-6/` | 历史发布说明中 Work / Codex 的 max 设置与可用性说明 |
 | S12 | `https://developers.openai.com/api/docs/models/gpt-6-sol` | GPT-6 Sol 家族的官方历史参考；当前运行时 ID 以 S15 的本机目录核验为准 |
 | S15 | 当前 Codex 运行时模型目录 | 部署时现场核验 `gpt-6.1-sol` 是否已提供及其支持档位；当前主机已暴露该模型 ID |
 | S13 | `https://developers.openai.com/api/docs/models/gpt-6-luna` | GPT-6 Luna 标识、聚焦高频任务定位、High / XHigh / Max 支持、上下文和 API 价格 |

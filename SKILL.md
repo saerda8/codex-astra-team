@@ -13,22 +13,22 @@ description: Use when installing, upgrading, auditing, or repairing an Astra-led
 |---|---|---|
 | 主会话 | gpt-6-astra 或 gpt-6.1-sol | 当前回合实际档位 |
 | astra_xhigh | gpt-6-astra | xhigh |
-| sol_high | gpt-5.6-sol | high |
-| sol_xhigh | gpt-5.6-sol | xhigh |
+| sol_high | gpt-6-sol | high |
+| sol_xhigh | gpt-6-sol | xhigh |
 | sol6_high | gpt-6.1-sol | high |
 | sol6_xhigh | gpt-6.1-sol | xhigh |
 | sol6_max | gpt-6.1-sol | max |
-| terra_max | gpt-5.6-terra | max |
+| terra_max | gpt-6.1-terra | max |
 | terra61_high | gpt-6.1-terra | high |
 | terra61_xhigh | gpt-6.1-terra | xhigh |
 | terra61_max | gpt-6.1-terra | max |
 | luna6_high | gpt-6-luna | high |
 | luna6_xhigh | gpt-6-luna | xhigh |
 | luna6_max | gpt-6-luna | max |
-| luna_max | gpt-5.6-luna | max |
-| luna_explorer_max | gpt-5.6-luna | max，只读 |
+| luna_max | gpt-6-luna | max |
+| luna_explorer_max | gpt-6-luna | max，只读 |
 
-GPT-6 Astra 主会话负责最难的核心方案、关键机制、重大取舍与关键验收，并按复杂度把高级工程执行交给 Sol 6 High、XHigh 或 Max。GPT-6 Sol 主会话负责复杂编码和代理式工作流，但不得派给 sol6_ 角色来满足派工，应使用 Luna、Terra 或旧 Sol 独立复核。GPT-6.1 Terra 按 High、XHigh、Max 处理平衡型中等任务。两者在 Medium 及以上都要派工。GPT-6 Luna 按 High、XHigh、Max 分档。只由主会话创建子代理；并发上限为两个。
+GPT-6 Astra 主会话负责最难的核心方案、关键机制、重大取舍与关键验收，并按复杂度把高级工程执行交给 Sol 6.1 High、XHigh 或 Max。GPT-6 Sol 主会话负责复杂编码和代理式工作流，但不得派给 sol6_ 角色来满足派工，应使用 GPT-6 Luna、GPT-6.1 Terra 或 GPT-6 Sol 独立复核。GPT-6.1 Terra 按 High、XHigh、Max 处理平衡型中等任务。两者在 Medium 及以上都要派工。GPT-6 Luna 按 High、XHigh、Max 分档。只由主会话创建子代理；并发上限为两个。
 
 运行触发条件固定为：主会话是 `gpt-6-astra` 或 `gpt-6.1-sol`，且推理档位为 medium、high、xhigh、max 或 ultra。从 Medium 起进入协作路由；Low 仍可直接完成。普通解释、追问、确认或状态问题直接回答，不触发协作、不调用 `spawn_agent`，也不恢复旧任务；其他主会话不触发本策略。
 

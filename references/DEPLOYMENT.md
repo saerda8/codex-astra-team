@@ -1,6 +1,6 @@
 # Codex Astra / Sol 多模型策略部署方案
 
-版本：1.6.2 ｜ 更新日期：2026-10-30 ｜ 默认范围：全局所有项目
+版本：1.7.0 ｜ 更新日期：2026-11-02 ｜ 默认范围：全局所有项目
 
 部署时同时同步 GLOBAL_DEPLOYMENT.md 中的额度规则：普通交流以及 GPT-6 Astra / Sol 的 Low 可直接处理；两者在 Medium 及以上的明确执行任务不论大小先派一个匹配助手。GPT-6 Luna 按 High、XHigh、Max 三档固定角色使用。不修改用户选择的模型和档位，不引入硬拦截。
 
@@ -61,24 +61,24 @@ MCP 是条件性能力：已加载、健康且适合当前子任务的 MCP 必�
 | 主会话 | gpt-6-astra | 当前回合实际档位 | 核心主导：总体架构、关键机制、重大取舍、关键实现与重要验收 |
 | 主会话 | gpt-6.1-sol | 当前回合实际档位 | 复杂编码和代理式工作流；Medium 及以上同样必须派工 |
 | astra_xhigh | gpt-6-astra | xhigh（极高） | 特别复杂的核心问题、全局方案重审、跨模块重大疑难 |
-| sol_high | gpt-5.6-sol | high（高） | 次级负责人：方案内的模块设计、复杂实现、调试、整合和日常验收 |
-| sol_xhigh | gpt-5.6-sol | xhigh（极高） | 架构已定但逻辑复杂、难定位或边界验证要求高的工作 |
+| sol_high | gpt-6-sol | high（高） | 次级负责人：方案内的模块设计、复杂实现、调试、整合和日常验收 |
+| sol_xhigh | gpt-6-sol | xhigh（极高） | 架构已定但逻辑复杂、难定位或边界验证要求高的工作 |
 | sol6_high | gpt-6.1-sol | high（高） | Astra 下的高级实现、模块负责和常规工程验收 |
 | sol6_xhigh | gpt-6.1-sol | xhigh（极高） | Astra 下的深度调试、跨模块工程和严格复核 |
 | sol6_max | gpt-6.1-sol | max（满档） | Astra 下最困难但架构已确定的工程与穷尽验证 |
 | terra61_high | gpt-6.1-terra | high（高） | GPT-6.1 Terra 的平衡型中等复杂度实现与集成 |
 | terra61_xhigh | gpt-6.1-terra | xhigh（极高） | GPT-6.1 Terra 的跨文件诊断、修改与严格复核 |
 | terra61_max | gpt-6.1-terra | max（满档） | GPT-6.1 Terra 的复杂但边界明确实现与穷尽验收 |
-| terra_max | gpt-5.6-terra | max（满档） | GPT-6.1 Terra 不可用时的兼容备选 |
+| terra_max | gpt-6.1-terra | max（满档） | GPT-6.1 Terra 的兼容别名 |
 | luna6_high | gpt-6-luna | high（高） | 简单且边界清楚的执行、精确修改、常规测试与自动化 |
 | luna6_xhigh | gpt-6-luna | xhigh（极高） | 较复杂的协调修改、诊断、跨文件更新与验证 |
 | luna6_max | gpt-6-luna | max（满档） | 复杂但架构和边界已确定的实现、集成与严格验收 |
-| luna_max | gpt-5.6-luna | max（满档） | 小任务、局部修复、批量修改、补测试与文档 |
-| luna_explorer_max | gpt-5.6-luna | max（满档） | 只读探索、定位入口、追踪调用关系、整理证据 |
+| luna_max | gpt-6-luna | max（满档） | 小任务、局部修复、批量修改、补测试与文档 |
+| luna_explorer_max | gpt-6-luna | max（满档） | 只读探索、定位入口、追踪调用关系、整理证据 |
 
-GPT-6 Astra / Sol 主会话保留用户实际档位，Low 不强制派工，Medium 及以上强制派工。GPT-6 Luna 使用三个显式角色，不得静默改档：High、XHigh、Max 分别对应简单、较复杂、复杂但边界明确的任务。GPT-6.1 Terra 同样使用 High、XHigh、Max 三个显式角色；旧 GPT-5.6 Terra 角色仅作为兼容备选保留。官方资料证明 GPT-6 Luna 更便宜且面向高频、聚焦任务，但没有证明它与 Terra 能力等同，因此保留独立 Terra 角色。[S5–S8、S11–S15]
+GPT-6 Astra / Sol 主会话保留用户实际档位，Low 不强制派工，Medium 及以上强制派工。GPT-6 Luna 使用三个显式角色，不得静默改档：High、XHigh、Max 分别对应简单、较复杂、复杂但边界明确的任务。GPT-6.1 Terra 同样使用 High、XHigh、Max 三个显式角色；terra_max 仅作为兼容别名保留。[S5–S8、S11–S16]
 
-档位术语：none 表示不启用显式推理，low 为低，medium 为中，high 为高，xhigh 为极高，max 为满档。本方案实际使用的组合以上表为准；部署报告必须另外列出当前客户端检测到的各模型可用档位，不将一份通用名称列表冒充每个模型都支持的全集。Astra 模型页列出 low / medium / high / xhigh / max，GPT-5.6 发布说明明确提到 Work 和 Codex 的 max 设置。[S5、S11]
+档位术语：none 表示不启用显式推理，low 为低，medium 为中，high 为高，xhigh 为极高，max 为满档。本方案实际使用的组合以上表为准；部署报告必须另外列出当前客户端检测到的各模型可用档位，不将一份通用名称列表冒充每个模型都支持的全集。当前模型发布说明明确提到 Work 和 Codex 的 max 设置。[S5、S11]
 
 **关键兼容性提醒：** 核对时，模型资料和发布说明包含 max，而 Codex 配置参考中的 model_reasoning_effort 枚举仍只展示到 xhigh。不能据此猜测本机行为。必须检查当前版本的模型目录、配置解析和实际请求；max 不可用就标记阻塞，保留旧的可运行配置，不静默降档。[S2、S4、S5、S11]
 
@@ -186,7 +186,7 @@ hooks = true
 [agents]
 enabled = true
 max_concurrent_threads_per_session = 2
-default_subagent_model = "gpt-5.6-luna"
+default_subagent_model = "gpt-6-luna"
 default_subagent_reasoning_effort = "max"
 ```
 

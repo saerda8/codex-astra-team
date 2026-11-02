@@ -37,7 +37,7 @@
 保持 Codex 默认表达方式；本技能不规定开头、中间过程、结论或其他回复的格式、标题、措辞、顺序及示例。实际派工时只额外用一句话说明交给谁、做什么；使用已核实的角色和档位，不猜测，不把计划写成已经执行，不要求在进度或结尾重复。
 
 
-GPT-6 Astra 或 Sol 在 Medium 及以上的明确执行型任务必须先真正派工。Astra 按复杂度把高级工程执行交给 sol6_high、sol6_xhigh 或 sol6_max。GPT-6 Sol 主会话不得派给 sol6_ 角色来满足派工，应使用 Luna、Terra 或旧 Sol。GPT-6.1 Terra 按 High、XHigh、Max 处理平衡型中等任务；旧 Terra 继续作为兼容备选。GPT-6 Luna 按 High、XHigh、Max 分档。
+GPT-6 Astra 或 Sol 在 Medium 及以上的明确执行型任务必须先真正派工。Astra 按复杂度把高级工程执行交给 sol6_high、sol6_xhigh 或 sol6_max。GPT-6 Sol 主会话不得派给 sol6_ 角色来满足派工，应使用 GPT-6 Luna、GPT-6.1 Terra 或 GPT-6 Sol。GPT-6.1 Terra 按 High、XHigh、Max 处理平衡型中等任务；terra_max 作为兼容别名。GPT-6 Luna 按 High、XHigh、Max 分档。
 
 
 

@@ -58,7 +58,7 @@ class StrategyTests(unittest.TestCase):
     def test_model_override(self):
         self.payload['tool_input']['model']='gpt-6-astra'; self.assertFalse(self.evaluate()[0])
     def test_matching_override(self):
-        self.payload['tool_input'].update(model='gpt-5.6-luna',reasoning_effort='max')
+        self.payload['tool_input'].update(model='gpt-6-luna',reasoning_effort='max')
         self.assertTrue(self.evaluate()[0])
     def test_current_codex_task_name_role_field(self):
         policy = copy.deepcopy(self.policy)
@@ -72,7 +72,7 @@ class StrategyTests(unittest.TestCase):
             'task_name': 'luna_max',
             'message': 'test',
             'fork_turns': 'all',
-            'model': 'gpt-5.6-luna',
+            'model': 'gpt-6-luna',
             'reasoning_effort': 'max',
         }
         self.assertTrue(self.evaluate(payload, policy)[0])
@@ -107,6 +107,12 @@ class StrategyTests(unittest.TestCase):
         self.assertIn('[agents.astra_xhigh]', global_fragment)
         self.assertIn('config_file = "./agents/astra_xhigh.toml"', global_fragment)
         for role, effort in (
+            ('sol_high', 'high'), ('sol_xhigh', 'xhigh'),
+        ):
+            self.assertIn(f'[agents.{role}]', global_fragment)
+            self.assertIn(f'config_file = "./agents/{role}.toml"', global_fragment)
+            self.assertEqual(model_guard.EXPECTED[role], ('gpt-6-sol', effort))
+        for role, effort in (
             ('luna6_high', 'high'), ('luna6_xhigh', 'xhigh'), ('luna6_max', 'max'),
         ):
             self.assertIn(f'[agents.{role}]', global_fragment)
@@ -124,6 +130,7 @@ class StrategyTests(unittest.TestCase):
             self.assertIn(f'[agents.{role}]', global_fragment)
             self.assertIn(f'config_file = "./agents/{role}.toml"', global_fragment)
             self.assertEqual(model_guard.EXPECTED[role], ('gpt-6.1-terra', effort))
+        self.assertEqual(model_guard.EXPECTED['terra_max'], ('gpt-6.1-terra', 'max'))
         self.assertIn('必须使用已验证的 `agent_type`', global_guide)
         for event in ('UserPromptSubmit', 'PreToolUse', 'SubagentStart', 'Stop'):
             self.assertIn(event, hook_fragment['hooks'])
@@ -153,10 +160,23 @@ class StrategyTests(unittest.TestCase):
         self.assertIn('gpt-6.1-sol', documents)
         self.assertIn('gpt-6.1-terra', documents)
         self.assertIn('gpt-6-luna', documents)
+        self.assertNotIn('gpt-5.6-', documents)
         self.assertIn('luna6_high', documents)
         self.assertIn('luna6_xhigh', documents)
         self.assertIn('luna6_max', documents)
         self.assertIn('GPT-6.1 Terra', documents)
+
+    def test_active_bundle_has_no_legacy_56_models(self):
+        bundle = Path(__file__).resolve().parents[1]
+        paths = [
+            bundle / 'SKILL.md',
+            bundle / 'assets/config.fragment.toml',
+            bundle / 'assets/config.global.fragment.toml',
+            bundle / 'scripts/astra_turn_guard.py',
+            bundle / 'scripts/model_guard.py',
+        ] + list((bundle / 'assets/agents').glob('*.toml'))
+        active = '\n'.join(path.read_text(encoding='utf-8') for path in paths)
+        self.assertNotIn('gpt-5.6-', active)
 
     def test_astra_can_delegate_to_sol6_but_sol6_controller_cannot_self_delegate(self):
         bundle = Path(__file__).resolve().parents[1]
@@ -268,7 +288,7 @@ class StrategyTests(unittest.TestCase):
         with self.assertRaises(ValueError): strategy.stage(self.root,self.root/'.codex/stage')
     def test_catalog_requires_max(self):
         p=self.base/'catalog.json'
-        p.write_text(json.dumps({'data':[{'model':'gpt-5.6-luna','supportedReasoningEfforts':[{'reasoningEffort':'xhigh'}]}],'nextCursor':None}))
+        p.write_text(json.dumps({'data':[{'model':'gpt-6-luna','supportedReasoningEfforts':[{'reasoningEffort':'xhigh'}]}],'nextCursor':None}))
         with contextlib.redirect_stdout(io.StringIO()): self.assertFalse(strategy.catalog_check(p))
     def test_catalog_all_combinations(self):
         p=self.base/'catalog.json'
@@ -679,7 +699,7 @@ class AstraTurnGuardTests(unittest.TestCase):
     def test_child_turn_subagent_start_unlocks_parent_turn_controls(self):
         self.register_turn()
         self.run_guard(
-            'SubagentStart', turn_id='child-turn', model='gpt-5.6-luna',
+            'SubagentStart', turn_id='child-turn', model='gpt-6-luna',
             agent_id='agent-1', agent_type='luna_explorer_max',
         )
         for tool_name in (
@@ -772,7 +792,7 @@ class AstraTurnGuardTests(unittest.TestCase):
     def test_successful_followup_reuse_satisfies_stop_gate(self):
         self.register_turn()
         self.run_guard(
-            'SubagentStart', turn_id='child-turn', model='gpt-5.6-luna',
+            'SubagentStart', turn_id='child-turn', model='gpt-6-luna',
             agent_id='agent-1', agent_type='luna_explorer_max',
         )
         self.turn = 'turn-2'
@@ -801,8 +821,8 @@ class AstraTurnGuardTests(unittest.TestCase):
         self.assertEqual(second, {})
 
     def test_non_astra_root_is_ignored(self):
-        self.write_turn(model='gpt-5.6-sol', effort='ultra')
-        output = self.run_guard('UserPromptSubmit', model='gpt-5.6-sol', prompt='继续')
+        self.write_turn(model='gpt-6-sol', effort='ultra')
+        output = self.run_guard('UserPromptSubmit', model='gpt-6-sol', prompt='继续')
         self.assertEqual(output, {})
 
 

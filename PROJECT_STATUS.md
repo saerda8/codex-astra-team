@@ -1,6 +1,6 @@
 # 项目状态
 
-当前版本 1.6.2。
+当前版本 1.7.0。
 
 已实现角色模板、GPT-6 Astra / Sol 从 Medium 起协作、GPT-6 Luna 三档角色、实际派工通知、非阻断提醒、短指令持续工作计数、派工关联，以及候选配置和备份回滚工具。
 
@@ -11,6 +11,7 @@
 1.5.0：加入 GPT-6 Sol 主会话路由与 GPT-6 Luna High / XHigh / Max 三档角色；保留 Terra，不宣称能力等价。
 1.6.1：将 GPT-6 Sol 全部迁移为 GPT-6.1 Sol；旧 6.0 ID 不再作为运行配置或派工角色。
 1.6.2：加入 GPT-6.1 Terra High / XHigh / Max，保留旧 Terra 作为兼容备选。
+1.7.0：淘汰旧版运行角色；旧 Sol/Luna 迁移到 6，旧 6 Sol 继续使用 6.1 Sol，Terra 统一使用当前可用的 6.1 Terra。
 
 ## 限制
 

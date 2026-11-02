@@ -10,20 +10,20 @@ import tomllib
 
 EXPECTED = {
     "astra_xhigh": ("gpt-6-astra", "xhigh"),
-    "sol_high": ("gpt-5.6-sol", "high"),
-    "sol_xhigh": ("gpt-5.6-sol", "xhigh"),
+    "sol_high": ("gpt-6-sol", "high"),
+    "sol_xhigh": ("gpt-6-sol", "xhigh"),
     "sol6_high": ("gpt-6.1-sol", "high"),
     "sol6_xhigh": ("gpt-6.1-sol", "xhigh"),
     "sol6_max": ("gpt-6.1-sol", "max"),
-    "terra_max": ("gpt-5.6-terra", "max"),
+    "terra_max": ("gpt-6.1-terra", "max"),
     "terra61_high": ("gpt-6.1-terra", "high"),
     "terra61_xhigh": ("gpt-6.1-terra", "xhigh"),
     "terra61_max": ("gpt-6.1-terra", "max"),
     "luna6_high": ("gpt-6-luna", "high"),
     "luna6_xhigh": ("gpt-6-luna", "xhigh"),
     "luna6_max": ("gpt-6-luna", "max"),
-    "luna_max": ("gpt-5.6-luna", "max"),
-    "luna_explorer_max": ("gpt-5.6-luna", "max"),
+    "luna_max": ("gpt-6-luna", "max"),
+    "luna_explorer_max": ("gpt-6-luna", "max"),
 }
 
 

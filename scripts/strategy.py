@@ -103,7 +103,7 @@ def static_errors(root: Path) -> list[str]:
         agents = conf.get("agents", {})
         checks += [(agents.get("enabled") is True, "agents enabled"),
                    (agents.get("max_concurrent_threads_per_session") == 2, "concurrency"),
-                   (agents.get("default_subagent_model") == "gpt-5.6-luna", "default child model"),
+                   (agents.get("default_subagent_model") == "gpt-6-luna", "default child model"),
                    (agents.get("default_subagent_reasoning_effort") == "max", "default child effort")]
         for passed, label in checks:
             if not passed:

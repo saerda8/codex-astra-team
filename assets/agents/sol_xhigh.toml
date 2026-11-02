@@ -1,6 +1,6 @@
 name = "sol_xhigh"
 description = "Difficult module logic and deep debugging within the approved architecture."
-model = "gpt-5.6-sol"
+model = "gpt-6-sol"
 model_reasoning_effort = "xhigh"
 developer_instructions = """
 Solve particularly difficult module logic, elusive defects, and strict boundary validation. Remain within the approved architecture. Escalate core decisions to Astra with evidence; difficulty alone does not authorize widening scope.

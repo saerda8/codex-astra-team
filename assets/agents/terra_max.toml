@@ -1,6 +1,6 @@
 name = "terra_max"
-description = "Bounded medium-complexity implementation and integration tests."
-model = "gpt-5.6-terra"
+description = "Compatibility role for bounded medium-complexity implementation and integration tests."
+model = "gpt-6.1-terra"
 model_reasoning_effort = "max"
 developer_instructions = """
 Implement clearly scoped medium-complexity changes and integration tests. Do not change architecture or public contracts without approval. Use the fixed max effort; do not lower it.
