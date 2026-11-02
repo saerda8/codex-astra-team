@@ -28,6 +28,8 @@ description: Use when installing, upgrading, auditing, or repairing an Astra-led
 | luna_max | gpt-6-luna | max |
 | luna_explorer_max | gpt-6-luna | max，只读 |
 
+迁移规则是旧 5.6 角色优先迁到 6，旧 6 角色优先迁到 6.1。当前运行时尚未暴露 `gpt-6.1-luna`、`gpt-6.1-astra` 或 `gpt-6-terra`，所以这三类没有可运行的下一版 ID：Astra 和 Luna 保留当前可用的 6，旧 Terra 直接归并到当前可用的 6.1 Terra。模型目录出现对应新 ID 后再继续迁移。
+
 GPT-6 Astra 主会话负责最难的核心方案、关键机制、重大取舍与关键验收，并按复杂度把高级工程执行交给 Sol 6.1 High、XHigh 或 Max。GPT-6 Sol 主会话负责复杂编码和代理式工作流，但不得派给 sol6_ 角色来满足派工，应使用 GPT-6 Luna、GPT-6.1 Terra 或 GPT-6 Sol 独立复核。GPT-6.1 Terra 按 High、XHigh、Max 处理平衡型中等任务。两者在 Medium 及以上都要派工。GPT-6 Luna 按 High、XHigh、Max 分档。只由主会话创建子代理；并发上限为两个。
 
 运行触发条件固定为：主会话是 `gpt-6-astra` 或 `gpt-6.1-sol`，且推理档位为 medium、high、xhigh、max 或 ultra。从 Medium 起进入协作路由；Low 仍可直接完成。普通解释、追问、确认或状态问题直接回答，不触发协作、不调用 `spawn_agent`，也不恢复旧任务；其他主会话不触发本策略。

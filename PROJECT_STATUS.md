@@ -11,7 +11,7 @@
 1.5.0：加入 GPT-6 Sol 主会话路由与 GPT-6 Luna High / XHigh / Max 三档角色；保留 Terra，不宣称能力等价。
 1.6.1：将 GPT-6 Sol 全部迁移为 GPT-6.1 Sol；旧 6.0 ID 不再作为运行配置或派工角色。
 1.6.2：加入 GPT-6.1 Terra High / XHigh / Max，保留旧 Terra 作为兼容备选。
-1.7.0：淘汰旧版运行角色；旧 Sol/Luna 迁移到 6，旧 6 Sol 继续使用 6.1 Sol，Terra 统一使用当前可用的 6.1 Terra。
+1.7.0：淘汰旧版运行角色；旧 Sol/Luna 迁移到 6，旧 6 Sol 继续使用 6.1 Sol，Terra 统一使用当前可用的 6.1 Terra。当前运行时没有 6.1 Luna、6.1 Astra 或 6.0 Terra，因此保留可运行的 6 Astra / Luna 与 6.1 Terra。
 
 ## 限制
 
